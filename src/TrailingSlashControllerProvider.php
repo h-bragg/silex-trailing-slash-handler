@@ -42,18 +42,18 @@ final class TrailingSlashControllerProvider implements ControllerProviderInterfa
 
             $request = Request::create(
                 '/' . $resource . '/',
-                $app['request']->getMethod(),
+                $app['request_stack']->getCurrentRequest()->getMethod(),
                 [],
-                $app['request']->cookies->all(),
-                $app['request']->files->all(),
-                $app['request']->server->all(),
-                $app['request']->getContent()
+                $app['request_stack']->getCurrentRequest()->cookies->all(),
+                $app['request_stack']->getCurrentRequest()->files->all(),
+                $app['request_stack']->getCurrentRequest()->server->all(),
+                $app['request_stack']->getCurrentRequest()->getContent()
             );
             $request = $request->duplicate(
-                $app['request']->query->all(),
-                $app['request']->request->all()
+                $app['request_stack']->getCurrentRequest()->query->all(),
+                $app['request_stack']->getCurrentRequest()->request->all()
             );
-            $request->headers->replace($app['request']->headers->all());
+            $request->headers->replace($app['request_stack']->getCurrentRequest()->headers->all());
 
             // Make an internal sub-request based off the request that would have 404'd.
             // http://silex.sensiolabs.org/doc/usage.html#forwards
